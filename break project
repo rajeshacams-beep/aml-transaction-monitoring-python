@@ -14,3 +14,35 @@ for month, amount in enumerate(transactions, start=1):
     if total_deposit > 500000:
         print("⚠️ ALERT: Financial Crime Risk Tool triggered — deposits exceed threshold!")
         break
+
+
+import matplotlib.pyplot as plt
+
+# Declared monthly deposit
+declared_limit = 100000  
+
+# Actual deposits for 2 months
+transactions = [250000, 300000]  
+months = ["Month 1", "Month 2"]
+
+# Calculate cumulative deposits
+total_deposit = 0
+for month, amount in enumerate(transactions, start=1):
+    total_deposit += amount
+    print(f"Month {month}: Cash deposit = {amount} AED, Total = {total_deposit} AED")
+    
+    # Risk check
+    if total_deposit > 500000:
+        print("⚠️ ALERT: Financial Crime Risk Tool triggered — deposits exceed threshold!")
+        break
+
+# --- Visualization ---
+plt.figure(figsize=(8,5))
+plt.bar(months, transactions, color=['skyblue','orange'])
+plt.axhline(y=declared_limit, color='green', linestyle='--', label='Declared Limit (100K AED)')
+plt.axhline(y=500000, color='red', linestyle='--', label='Risk Threshold (500K AED)')
+
+plt.title("Cash Deposit Monitoring: Declared vs Actual")
+plt.ylabel("Deposit Amount (AED)")
+plt.legend()
+plt.show()
