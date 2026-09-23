@@ -1,0 +1,16 @@
+# Customer declared: 100K AED monthly cash deposit
+declared_limit = 100000  
+
+# Model checks 2 months of transactions
+transactions = [250000, 300000]  # actual deposits in 2 months
+
+total_deposit = 0
+
+for month, amount in enumerate(transactions, start=1):
+    total_deposit += amount
+    print(f"Month {month}: Cash deposit = {amount} AED, Total = {total_deposit} AED")
+    
+    # Risk check: if deposits exceed 500K AED, trigger alert
+    if total_deposit > 500000:
+        print("⚠️ ALERT: Financial Crime Risk Tool triggered — deposits exceed threshold!")
+        break
