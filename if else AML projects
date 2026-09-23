@@ -1,0 +1,59 @@
+"""
+AML Transaction Monitoring - Basic Rule Engine
+Author: [Your name]
+Concepts used: if/else, for loops, range, lists
+
+This script checks a day's transactions against two AML rules:
+1. High-value transactions (above a threshold)
+2. Possible structuring (same customer, multiple deposits just under the threshold)
+"""
+
+# Sample transaction data (in a real job, this would come from a CSV)
+transaction_ids = ["TX001", "TX002", "TX003", "TX004", "TX005", "TX006", "TX007", "TX008"]
+customers       = ["C001", "C002", "C003", "C004", "C005", "C006", "C006", "C006"]
+amounts         = [8000, 25000, 150000, 7000, 200000, 45000, 42000, 40000]
+
+threshold = 100000
+
+# ---- Rule 1: High-value transactions ----
+print("---- Rule 1: High-value check ----")
+flagged_high_value = []
+
+for i in range(len(amounts)):
+    if amounts[i] > threshold:
+        status = "REVIEW"
+        flagged_high_value.append(transaction_ids[i])
+    else:
+        status = "No"
+    print(transaction_ids[i], "->", amounts[i], "->", status)
+
+print("Total high-value flags:", len(flagged_high_value))
+print()
+
+# ---- Rule 2: Possible structuring ----
+# Same customer making several deposits just under the threshold, same day
+print("---- Rule 2: Structuring check ----")
+
+customer_totals = {}   # dictionary: customer_id -> total amount deposited
+customer_counts = {}   # dictionary: customer_id -> number of deposits
+
+for i in range(len(amounts)):
+    cust = customers[i]
+    amt = amounts[i]
+
+    if amt >= 40000 and amt <= threshold:
+        if cust in customer_totals:
+            customer_totals[cust] = customer_totals[cust] + amt
+            customer_counts[cust] = customer_counts[cust] + 1
+        else:
+            customer_totals[cust] = amt
+            customer_counts[cust] = 1
+
+structuring_suspects = []
+
+for cust in customer_totals:
+    if customer_counts[cust] >= 3 and customer_totals[cust] > threshold:
+        structuring_suspects.append(cust)
+        print(cust, "-> deposits:", customer_counts[cust], "-> total: ₹" + str(customer_totals[cust]), "-> SUSPICIOUS")
+
+print("Total structuring suspects:", len(structuring_suspects))
