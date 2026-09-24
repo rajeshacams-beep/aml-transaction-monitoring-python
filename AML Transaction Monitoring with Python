@@ -1,0 +1,11 @@
+transactions = [2000, 5000, 12000, 800, 15000, 3000]
+
+THRESHOLD = 10000  # reporting limit
+
+for txn in transactions:
+    if txn < THRESHOLD:
+        # Detect small structuring transactions
+        print("Structuring alert: Small txn =", txn)
+    else:
+        # Larger transactions are ignored for now
+        pass
